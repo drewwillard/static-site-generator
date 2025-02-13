@@ -32,7 +32,10 @@ def split_nodes_link(old_nodes):
             for part in split_node:
                 if part == "":
                     continue
-                if link_parts[0][0] in part:
+                if link_parts == []:
+                    new_nodes.append(TextNode(part, TextType.TEXT))
+                    break
+                elif link_parts[0][0] in part:
                     new_nodes.append(TextNode(link_parts[0][0], TextType.LINK, link_parts[0][1]))
                     link_parts.pop(0)
                 else:
