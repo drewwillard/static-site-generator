@@ -1,21 +1,31 @@
+
 class HTMLNode():
     def __init__(self, tag = None, value = None, children = None, props = None):
         self.tag = tag
+        self.value = value
         self.children = children
         self.props = props
-        self.value = value
 
     def to_html(self):
         raise NotImplementedError("to_html not implemented")
 
+
     def props_to_html(self):
         if self.props:
-            return f" href={self.props['href']} target={self.props['target']}"
+            if "target" in self.props:
+                return f" href={self.props['href']} target={self.props['target']}"
+            else:
+                return f" href={self.props['href']} target=_blank"
         else:
             print("No props found")
 
     def __repr__(self):
-        return f"HTMLNode({self.tag}, {self.children}, {self.props})"
+        return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
+
+    def __eq__(self, other):
+        if not isinstance(other, HTMLNode):
+            return False
+        return self.tag == other.tag and self.value == other.value and self.children == other.children and self.props == other.props
 
 class LeafNode(HTMLNode):
     def __init__(self, tag = None, value = None, props = None):
@@ -43,8 +53,7 @@ class ParentNode(HTMLNode):
             raise ValueError("ParentNode must have children")
         child_list = []
         for child in self.children:
-            if child.children is not None:
-                child_list.append(child.to_html())
+            child_list.append(child.to_html())
         if self.props is None:
             return f"<{self.tag}>{''.join(child_list)}</{self.tag}>"
         else:

@@ -9,14 +9,27 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         if node.text_type != TextType.TEXT:
             new_nodes.append(node)
             continue
-        pieces = node.text.split(delimiter)
-        for i, piece in enumerate(pieces):
-            if piece == "":
+
+        parts = node.text.split(delimiter)
+        if len(parts) <= 1:
+            new_nodes.append(node)
+            continue
+
+        current_text = ""
+        is_inside_delimiter = False
+
+        for i, text in enumerate(parts):
+            if text == "":
+                is_inside_delimiter = not is_inside_delimiter
                 continue
-            if i % 2 == 0:
-                new_nodes.append(TextNode(piece, TextType.TEXT))
+            if is_inside_delimiter:
+                new_nodes.append(TextNode(parts[i].strip(), text_type))
             else:
-                new_nodes.append(TextNode(piece, text_type))
+                new_nodes.append(TextNode(parts[i], TextType.TEXT))
+
+            is_inside_delimiter = not is_inside_delimiter
+
+
     return new_nodes
 
 def split_nodes_link(old_nodes):
@@ -65,7 +78,7 @@ def split_nodes_images(old_nodes):
                     else:
                         new_nodes.append(TextNode(part, TextType.TEXT))
 
-        return new_nodes
+    return new_nodes
 
 def text_to_textnodes(text):
     list_text = [TextNode(text, TextType.TEXT)]

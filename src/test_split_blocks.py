@@ -22,3 +22,16 @@ class TestSplitBlocks(unittest.TestCase):
         text_with_multiple_newlines = "This is a paragraph.\n\n\nThis is another paragraph."
         expected_blocks_with_multiple_newlines = ["This is a paragraph.", "This is another paragraph."]
         self.assertEqual(markdown_to_blocks(text_with_multiple_newlines), expected_blocks_with_multiple_newlines)
+
+    def test_block_to_block_type(self):
+        from split_blocks import block_to_block_type
+
+        self.assertEqual(block_to_block_type('# This is a heading'), 'heading')
+        self.assertEqual(block_to_block_type('```python\nprint("Hello, World!")\n```'), 'code')
+        self.assertEqual(block_to_block_type('> This is a quote\n> Another line of the quote'), 'quote')
+        self.assertEqual(block_to_block_type('* Item 1\n* Item 2\n- Item 3'), 'unordered_list')
+        self.assertEqual(block_to_block_type('1. First item\n2. Second item\n3. Third item'), 'ordered_list')
+        self.assertEqual(block_to_block_type('This is a paragraph.'), 'paragraph')
+        self.assertEqual(block_to_block_type(''), 'paragraph')
+        self.assertEqual(block_to_block_type('Normal text\nwith multiple lines'), 'paragraph')
+        self.assertEqual(block_to_block_type('> Quote\nAnother line'), 'paragraph')

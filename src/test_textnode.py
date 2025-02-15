@@ -1,6 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType, text_node_to_html_node
+from htmlnode import LeafNode
 
 
 class TestTextNode(unittest.TestCase):
@@ -27,9 +28,9 @@ class TestTextToHTMLFunction(unittest.TestCase):
         node5 = TextNode("This is a text node", TextType.LINK, "https://www.google.com")
         node6 = TextNode("This is a text node", TextType.IMAGE, "https://www.google.com")
 
-        self.assertEqual(text_node_to_html_node(node), "<b>This is a text node</b>")
-        self.assertEqual(text_node_to_html_node(node2), "This is a text node")
-        self.assertEqual(text_node_to_html_node(node3), "<i>This is a text node</i>")
-        self.assertEqual(text_node_to_html_node(node4), "<code>This is a text node</code>")
-        self.assertEqual(text_node_to_html_node(node5), "<a href=https://www.google.com>This is a text node</a>")
-        self.assertEqual(text_node_to_html_node(node6), "<img src=https://www.google.com alt=This is a text node>")
+        self.assertEqual(text_node_to_html_node(node), LeafNode("b", "This is a text node"))
+        self.assertEqual(text_node_to_html_node(node2), LeafNode(None, "This is a text node"))
+        self.assertEqual(text_node_to_html_node(node3), LeafNode("i", "This is a text node"))
+        self.assertEqual(text_node_to_html_node(node4), LeafNode("code", "This is a text node"))
+        self.assertEqual(text_node_to_html_node(node5), LeafNode("a", "This is a text node", {"href": "https://www.google.com"}))
+        self.assertEqual(text_node_to_html_node(node6), LeafNode("img", None, {"src": "https://www.google.com"}))

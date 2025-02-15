@@ -18,3 +18,20 @@ def markdown_to_blocks(markdown):
         list_of_blocks.append(new_block)
 
     return list_of_blocks
+
+def block_to_block_type(block):
+    if block == "":
+        return "paragraph"
+    if block.startswith("#"):
+        return "heading"
+    if block.startswith("```"):
+        return "code"
+    block_list = block.split("\n")
+    if all(line[0] == ">" for line in block_list):
+        return "quote"
+    if all(line.strip().startswith(("* ", "- ")) for line in block_list):
+        return "unordered_list"
+    if all(line[0].isdigit() for line in block_list) and all(line[1] == "." for line in block_list):
+        return "ordered_list"
+    else:
+        return "paragraph"
