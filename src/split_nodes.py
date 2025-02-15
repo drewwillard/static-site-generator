@@ -23,9 +23,9 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 is_inside_delimiter = not is_inside_delimiter
                 continue
             if is_inside_delimiter:
-                new_nodes.append(TextNode(parts[i].strip(), text_type))
+                new_nodes.append(TextNode(text.strip(), text_type))
             else:
-                new_nodes.append(TextNode(parts[i], TextType.TEXT))
+                new_nodes.append(TextNode(text, TextType.TEXT))
 
             is_inside_delimiter = not is_inside_delimiter
 

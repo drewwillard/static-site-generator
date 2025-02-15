@@ -12,10 +12,13 @@ class HTMLNode():
 
     def props_to_html(self):
         if self.props:
-            if "target" in self.props:
-                return f" href={self.props['href']} target={self.props['target']}"
-            else:
-                return f" href={self.props['href']} target=_blank"
+            if "href" in self.props:
+                if "target" in self.props:
+                    return f" href={self.props['href']} target={self.props['target']}"
+                else:
+                    return f" href={self.props['href']} target=_blank"
+            if "src" in self.props:
+                return f" src={self.props['src']}"
         else:
             print("No props found")
 
@@ -39,6 +42,11 @@ class LeafNode(HTMLNode):
             return str(self.value)
         elif self.props is None:
             return f"<{self.tag}>{self.value}</{self.tag}>"
+        elif self.tag == "img":
+            if len(self.value) == 0:
+                return f"<{self.tag} src={self.props_to_html()}>"
+            else:
+                return f"<{self.tag} src={self.props_to_html()} alt={self.value}>"
         else:
             return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
 
